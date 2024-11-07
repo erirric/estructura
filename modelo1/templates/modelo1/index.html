@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Turnos</title>
+    <link href="{% static "CSS/modelo1.css" %}" type="text/css" rel="stylesheet">
+</head>
+<body>
+  <div id="mover">
+      <div><a href={% url "index" %}><button class="m" type="button">Inicio</button></a></div>
+      <div><a href={% url 'formulario' %}><button class="m" type="button">Agregar</button></a></div>
+      <div><a href={% url 'tabla' %}><button type="button" class="m">Tabla</button></a></div>
+      <div><a href={% url 'descarga' %}><button type="button" class="m">Descargar</button></a></div>
+      <div><a href={% url 'cargar' %}><button type="button" class="m">Cargar</button></a></div>
+      <div><a href={% url 'tablas_c' %}><button type="button" class="m">Tablas cargadas</button></a></div>
+  </div>
+ {% if mensajess %}
+    {% for message in messages %}
+        <div class="alert alert-{{ mensajess.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+ {% if Presentar %}
+      {% if Mensaje %}
+      <p>{{ Mensaje }}</p>
+      {% endif %}
+       <div id="boton">
+         <form method="post" action="{% url "siguiente"%}">
+             {% csrf_token %}
+             <button type="submit" class="button_3">Siguiente</button>
+         </form>
+         <form method="post" action="{% url "borrar"%}">
+             {% csrf_token %}
+             <button type="submit" class="button_4">borrar todo</button>
+         </form>
+     </div>
+
+      <table>
+      <thead>
+           <tr>
+               <th> Nombre </th>
+               <th> Apellido </th>
+               <th> Genero </th>
+               <th> Ticket </th>
+           </tr>
+      </thead>
+      <tbody>
+            {% if Atendiendo %}
+            <tr>
+                <td>{{ Atendiendo.nombre}}</td>
+                <td>{{ Atendiendo.apellido}}</td>
+                <td>{{ Atendiendo.genero}}</td>
+                <td>{{ Atendiendo.ticket}}</td>
+            </tr>
+
+            {% else %}
+                <tr><td colspan="5">---</td></tr>
+            {% endif %}
+  </table>
+  <table>
+      <thead>
+            <tr>
+                <th> Nombre </th>
+                <th> Apellido </th>
+                <th> Genero </th>
+                <th> Ticket </th>
+                </tr>
+      </thead>
+      <tbody>
+        {% for usuario in vincular %}
+            {% if usuario.estado == "Espera" %}
+                <tr>
+                     <td>{{ usuario.nombre}}</td>
+                     <td>{{ usuario.apellido}}</td>
+                     <td>{{ usuario.genero}}</td>
+                     <td>{{ usuario.ticket}}</td>
+
+            </tr>
+            {% endif %}
+       {% endfor %}
+     </tbody>
+  </table>
+ {% endif %}
+{% block content  %}{% endblock %}
+</body>
+</html>

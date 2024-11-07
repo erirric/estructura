@@ -1,0 +1,54 @@
+{% extends "modelo1/index.html" %}
+{% block content  %}
+    <form method="post" class="from" action="{% url "tabla" %}">
+          <h4>Buscar y Ordenar Usuario</h4>
+          {% csrf_token %}
+               {{ busqueda }}
+               <button type="submit" class="button_1">Enviar</button>
+               <button type="reset" class="button_2">Borrar</button>
+               <a href="{% url "tabla" %}"><button type="button" class="button_2">Regresar</button></a>
+     </form>
+    {% if Mensaje %}
+            <p>{{ Mensaje }}</p>
+    {% endif %}
+<table >
+    <thead>
+         <tr>
+             <th> Nombre </th>
+             <th> Apellido </th>
+             <th> Email </th>
+             <th> Cedula </th>
+             <th> Genero </th>
+             <th> Ticket </th>
+             <th> Opciones </th>
+         </tr>
+    </thead>
+    <tbody>
+     {% for usuario in vincular %}
+        <tr>
+            <td>{{ usuario.nombre}}</td>
+            <td>{{ usuario.apellido}}</td>
+            <td>{{ usuario.email}}</td>
+            <td>{{ usuario.cedula}}</td>
+            <td>{{ usuario.genero}}</td>
+            <td>{{ usuario.ticket}}</td>
+            {% if usuario.estado == "Espera" %}
+                <td>
+                 <form method="post"  action="{% url "borrar_1" usuario.id %}">
+                              {% csrf_token %}
+                              <button type="submit" class="boton_2_tabla">Borrar</button>
+                         </form>
+                         <form method="post"  action="{% url "editar" usuario.id %}">
+                              {% csrf_token %}
+                              <button type="submit" class="boton_1_tabla">Editar</button>
+                         </form>
+            </td>
+            {% endif %}
+            {% if usuario.estado == "Atendiendo" or usuario.estado == "Atendido" %}
+                <td></td>
+            {% endif %}
+        </tr>
+     {% endfor %}
+    </tbody>
+</table>
+{% endblock  %}

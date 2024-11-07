@@ -1,0 +1,13 @@
+{% extends "modelo1/index.html" %}
+{% block content  %}
+ <form method="post" class="from" action="{% url "cargar" %}" enctype="multipart/form-data">
+     <h4>Agregar archivo </h4>
+     {% csrf_token %}
+     {{ form }}
+     <button type="submit" class="button_1">Enviar</button>
+     <button type="reset" class="button_2">Borrar</button>
+ </form>
+   {% if mensaje %}
+        <p>{{ mensaje }}</p>
+    {% endif %}
+{% endblock %}

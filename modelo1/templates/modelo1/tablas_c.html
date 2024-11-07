@@ -1,0 +1,37 @@
+{% extends "modelo1/index.html" %}
+{% block content  %}
+    {% if mensaje %}
+            <p>{{ mensaje }}</p>
+    {% endif %}
+<table >
+    <thead>
+         <tr>
+             <th> archivo </th>
+             <th> Opciones </th>
+
+         </tr>
+    </thead>
+    <tbody>
+     {% for i in archivos %}
+         <tr>
+             <td>{{ i }}</td>
+             <td>
+                 <form method="post" action="{% url "subir_tabla" i.id %}">
+                     {% csrf_token %}
+                     <button type="submit" class="boton_1_tabla">Subir</button>
+                 </form>
+                   <form method="post" action="{% url "mostrar_json" i.id %}">
+                     {% csrf_token %}
+                     <button type="submit" class="boton_1_tabla">Tabla</button>
+                 </form>
+                   <form method="post" action="{% url "borrar_1_tabla" i.id %}">
+                     {% csrf_token %}
+                     <button type="submit" class="boton_2_tabla">Borrar</button>
+                 </form>
+             </td>
+         </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+{% endblock  %}

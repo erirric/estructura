@@ -1,0 +1,10 @@
+{% extends "modelo1/index.html" %}
+{% block content  %}
+ <form method="post" class="from" action="{% url "editar" id %}">
+     <h4>Agregar cliente </h4>
+     {% csrf_token %}
+     {{ forms }}
+     <button type="submit" class="button_1">Enviar</button>
+     <button type="reset" class="button_2">Borrar</button>
+ </form>
+{% endblock %}

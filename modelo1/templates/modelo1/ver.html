@@ -1,0 +1,37 @@
+
+{% extends "modelo1/index.html" %}
+{% block content  %}
+    {% if data %}
+        <table>
+            <thead>
+                <tr>
+                    <th> Nombre </th>
+                    <th> Apellido </th>
+                    <th> Email </th>
+                    <th> Cedula </th>
+                    <th> Genero </th>
+                    <th> Tiket </th>
+                    <th> Estado </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                    {% if item.fields.nombre %}
+                        <tr>
+                         <td>{{ item.fields.nombre}}</td>
+                        <td>{{ item.fields.apellido }}</td>
+                        <td>{{ item.fields.email }}</td>
+                        <td>{{ item.fields.cedula }}</td>
+                        <td>{{ item.fields.genero }}</td>
+                        <td>{{ item.fields.ticket }}</td>
+                        <td>{{ item.fields.estado }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay datos para mostrar.</p>
+    {% endif %}
+{% endblock %}
