@@ -1,6 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>TABLA DEL ARCHIVO</title>
+    <link href="{% static "CSS/modelo1.css" %}" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div id="mover">
+      <h1>TICKET</h1>
+       <div class="contenedor">
+            <div><a href={% url "index" %}><button class="m" type="button" title="Inicio"><img src="{% static "img/hogar.png" %}" alt="icono" class="img"></button></a></div>
+           <div><a href={% url 'formulario' %}><button class="m" type="button" title="Agregar"><img src="{% static "img/registro.png" %}" alt="icono" class="img"></button></a></div>
+           <div><a href={% url 'tabla' %}><button type="button" class="m" title="Buscar"><img src="{% static "img/lupa.png" %}" alt="icono" class="img"></button></a></div>
+           <div><a href={% url 'tablas_c' %}><button type="button" class="m" title="Archivos cargados"><img src="{% static "img/bandeja-de-entrada.png" %}" alt="icono" class="img"> </button></a></div>
+       </div>
 
-{% extends "modelo1/index.html" %}
-{% block content  %}
+       <div>
+           <a href={% url 'cargar' %}><button type="button" class="m des"><img src="{% static "img/subir.png" %}" alt="icono" class="img">Cargar</button></a>
+           <a href={% url 'descarga' %}><button type="button" class="m des"><img src="{% static "img/descargar.png" %}" alt="icono" class="img">Descargar</button></a>
+       </div>
+  </div>
+<div class="mover_tabla_busqueda">
     {% if data %}
         <table>
             <thead>
@@ -34,4 +55,6 @@
     {% else %}
         <p>No hay datos para mostrar.</p>
     {% endif %}
-{% endblock %}
+</div>
+</body>
+</html>

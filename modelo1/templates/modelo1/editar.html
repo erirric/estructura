@@ -1,10 +1,32 @@
-{% extends "modelo1/index.html" %}
-{% block content  %}
- <form method="post" class="from" action="{% url "editar" id %}">
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar</title>
+    <link href="{% static "CSS/modelo1.css" %}" type="text/css" rel="stylesheet">
+</head>
+<body>
+ <div id="mover">
+      <h3>TICKET</h3>
+       <div class="contenedor">
+            <div><a href={% url "index" %}><button class="m" type="button" title="Inicio"><img src="{% static "img/hogar.png" %}" alt="icono" class="img"></button></a></div>
+           <div><a href={% url 'formulario' %}><button class="m" type="button" title="Agregar"><img src="{% static "img/registro.png" %}" alt="icono" class="img"></button></a></div>
+           <div><a href={% url 'tabla' %}><button type="button" class="m" title="Buscar"><img src="{% static "img/lupa.png" %}" alt="icono" class="img"></button></a></div>
+           <div><a href={% url 'tablas_c' %}><button type="button" class="m" title="Archivos cargados"><img src="{% static "img/bandeja-de-entrada.png" %}" alt="icono" class="img"> </button></a></div>
+       </div>
+
+       <div>
+           <a href={% url 'cargar' %}><button type="button" class="m des"><img src="{% static "img/subir.png" %}" alt="icono" class="img">Cargar</button></a>
+           <a href={% url 'descarga' %}><button type="button" class="m des"><img src="{% static "img/descargar.png" %}" alt="icono" class="img">Descargar</button></a>
+       </div>
+  </div>
+<form method="post" class="from" action="{% url "editar" id %}">
      <h4>Agregar cliente </h4>
      {% csrf_token %}
      {{ forms }}
      <button type="submit" class="button_1">Enviar</button>
      <button type="reset" class="button_2">Borrar</button>
  </form>
-{% endblock %}
+</body>
+</html>

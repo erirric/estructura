@@ -8,14 +8,14 @@ urlpatterns = [
      path("tabla/",views.tabla,name="tabla"),
      path("siguiente/",views.siguiente,name="siguiente"),
      path("borrar/",views.borrar,name="borrar"),
-     path("borrar_1/<int:id>/",views.borrar_1,name="borrar_1"),
-     path("editar/<int:id>",views.editar,name="editar"),
+     path("borrar_1/<int:id_1>/",views.borrar_1,name="borrar_1"),
+     path("editar/<int:id_1>",views.editar,name="editar"),
      path("descarga/",views.descargar,name="descarga"),
      path("cargar/",views.cargar,name="cargar"),
-     path('mostrar-json/<int:id>', views.mostrar_json, name='mostrar_json'),
-     path('subir_tabla/<int:id>', views.subir_tabla, name='subir_tabla'),
+     path('mostrar-json/<int:id_1>', views.mostrar_json, name='mostrar_json'),
+     path('subir_tabla/<int:id_1>', views.subir_tabla, name='subir_tabla'),
      path('tablas_c/', views.tablas_c, name='tablas_c'),
-     path('borrar_1_tabla/<int:id>', views.borrar_1_tabla, name='borrar_1_tabla'),
+     path('borrar_1_tabla/<int:id_1>', views.borrar_1_tabla, name='borrar_1_tabla'),
 ]
 
 

@@ -1,7 +1,7 @@
 {% extends "modelo1/index.html" %}
 {% block content  %}
  <form method="post" class="from" action="{% url "formulario" %}">
-     <h4> Agregar usuario </h4>
+     <h2> Agregar usuario </h2>
      {% csrf_token %}
      {{ forms }}
      <button type="submit" class="button_1">Enviar</button>

@@ -1,17 +1,40 @@
-{% extends "modelo1/index.html" %}
-{% block content  %}
-    <form method="post" class="from" action="{% url "tabla" %}">
-          <h4>Buscar y Ordenar Usuario</h4>
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Turnos</title>
+    <link href="{% static "CSS/modelo1.css" %}" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div id="mover">
+      <h1>TICKET</h1>
+       <div class="contenedor">
+            <div><a href={% url "index" %}><button class="m" type="button" title="Inicio"><img src="{% static "img/hogar.png" %}" alt="icono" class="img"></button></a></div>
+           <div><a href={% url 'formulario' %}><button class="m" type="button" title="Agregar"><img src="{% static "img/registro.png" %}" alt="icono" class="img"></button></a></div>
+           <div><a href={% url 'tabla' %}><button type="button" class="m" title="Buscar"><img src="{% static "img/lupa.png" %}" alt="icono" class="img"></button></a></div>
+           <div><a href={% url 'tablas_c' %}><button type="button" class="m" title="Archivos cargados"><img src="{% static "img/bandeja-de-entrada.png" %}" alt="icono" class="img"> </button></a></div>
+       </div>
+       <div>
+           <a href={% url 'cargar' %}><button type="button" class="m des"><img src="{% static "img/subir.png" %}" alt="icono" class="img">Cargar</button></a>
+           <a href={% url 'descarga' %}><button type="button" class="m des"><img src="{% static "img/descargar.png" %}" alt="icono" class="img">Descargar</button></a>
+       </div>
+  </div>
+  <div id="busqueda">
+      <form method="post" class="from_2" action="{% url "tabla" %}">
+          <h2>Buscar y Ordenar Usuario</h2>
           {% csrf_token %}
                {{ busqueda }}
-               <button type="submit" class="button_1">Enviar</button>
-               <button type="reset" class="button_2">Borrar</button>
-               <a href="{% url "tabla" %}"><button type="button" class="button_2">Regresar</button></a>
+               <button type="submit" class="button_1_editar">Enviar</button>
+               <button type="reset" class="button_1_editar borrar">Borrar</button>
+               <a href="{% url "tabla" %}"><button type="button" class="button_1_editar recargar">Regresar</button></a>
      </form>
+  </div >
     {% if Mensaje %}
-            <p>{{ Mensaje }}</p>
+            <p class="mensaje">{{ Mensaje }}</p>
     {% endif %}
-<table >
+<div class="mover_tabla_busqueda">
+    <table >
     <thead>
          <tr>
              <th> Nombre </th>
@@ -36,7 +59,7 @@
                 <td>
                  <form method="post"  action="{% url "borrar_1" usuario.id %}">
                               {% csrf_token %}
-                              <button type="submit" class="boton_2_tabla">Borrar</button>
+                              <button type="submit" class="boton_1_tabla">Borrar</button>
                          </form>
                          <form method="post"  action="{% url "editar" usuario.id %}">
                               {% csrf_token %}
@@ -51,4 +74,6 @@
      {% endfor %}
     </tbody>
 </table>
-{% endblock  %}
+</div>
+</body>
+</html>

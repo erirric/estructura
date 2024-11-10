@@ -20,21 +20,21 @@ buscado=[
     ("A","Apellido"),
     ("E","Email"),
     ("G","Genero"),
-    ("T","Tiket"),
+    ("T","Ticket"),
 ]
 ordenado=[
     (None,"seleccione"),
     ("nombre","Nombre"),
     ("apellido","Apellido"),
     ("email","Email"),
-    ("ticket","Tiket"),
-    ("genero","gene"),
+    ("ticket","Ticket"),
+    ("genero","genero"),
 ]
 class Bucar(forms.Form):
-    BC = forms.CharField(max_length=50, label="buscar",required=False,widget=forms.TextInput(attrs={'class': 'form-control'}))
-    type_bus = forms.ChoiceField(choices=buscado, label="busqueda", required=False, widget=forms.Select(attrs={'class': 'form-control'}))
-    type_or = forms.ChoiceField(choices=ordenado, label="ordenar", required=False, widget=forms.Select(attrs={'class': 'form-control'}))
+    BC = forms.CharField(max_length=50, label="Buscar",required=False,widget=forms.TextInput(attrs={'class': 'form-control-busqueda'}))
+    type_bus = forms.ChoiceField(choices=buscado, label="Busqueda", required=False, widget=forms.Select(attrs={'class': 'form-control-busqueda'}))
+    type_or = forms.ChoiceField(choices=ordenado, label="Ordenar", required=False, widget=forms.Select(attrs={'class': 'form-control-busqueda'}))
 
 class ArchivoForm(forms.Form):
-    archivo = forms.FileField(label="archivo")
+    archivo = forms.FileField(label="Archivo")
 

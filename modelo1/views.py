@@ -14,7 +14,7 @@ from .clases import  ListaEnlazada, Error, Organizar
 def index(request):
     vincular = ListaEnlazada()
     mensaje=None
-    Atendiendo = None
+    atendiendo = None
     nodos=""
     try:
         for i in Usuario.objects.all():
@@ -30,17 +30,20 @@ def index(request):
     else:
         for guardar in estados:
             if guardar.estado == "Atendiendo":
-                Atendiendo = guardar
+                atendiendo = guardar
                 break
     requerido={
         "vincular":nodos ,
-        "Atendiendo": Atendiendo,
+        "Atendiendo": atendiendo,
         "Presentar":True,
         "Mensaje":mensaje,
+        "Presentar_blo": True,
     }
     return render(request,"modelo1/index.html",requerido)
 def formulario(request):
+    vincular = ListaEnlazada()
     from_1 = UsuariosForm()
+    atendiendo_f = None
     if request.method=="POST":
         form =UsuariosForm(request.POST)
         if form.is_valid():
@@ -48,7 +51,7 @@ def formulario(request):
             for i in Usuario.objects.all():
                 ultimo_usuario = i.ticket
             nuevo_tiket = (ultimo_usuario + 1) if ultimo_usuario else 1
-            USER = Usuario(
+            user = Usuario(
             nombre = form.cleaned_data['nombre'],
             apellido = form.cleaned_data['apellido'],
             email = form.cleaned_data['email'],
@@ -56,8 +59,22 @@ def formulario(request):
             cedula = form.cleaned_data['cedula'],
             ticket=nuevo_tiket
             )
-            USER.save()
-    return render(request,"modelo1/formulario.html",{"forms":from_1,"Presentar":False})
+            user.save()
+    for i in Usuario.objects.all():
+        vincular.agregar_usuario(i)
+    estados = vincular.listar_usuarios()
+    nodos = vincular.listar_usuarios()
+    for guardar in estados:
+        if guardar.estado == "Atendiendo":
+            atendiendo_f = guardar
+            break
+    requerido = {
+        "vincular": nodos,
+        "Atendiendo": atendiendo_f,
+        "Presentar": True,
+        "forms": from_1,
+    }
+    return render(request,"modelo1/formulario.html",requerido)
 def tabla(request):
     vincular = ListaEnlazada()
     mensaje=None
@@ -73,22 +90,22 @@ def tabla(request):
                 try:
                    if b_1!="" and b_2!="" :
                        if b_2 == "N":
-                           if errores.error_1(b_1) == None:
+                           if errores.error_1(b_1) is None:
                                for i in Usuario.objects.all():
                                    if b_1.upper() in i.nombre.upper():
                                        vincular.agregar_usuario(i)
                        elif b_2 == "A":
-                           if errores.error_1(b_1) == None:
+                           if errores.error_1(b_1) is None:
                                for i in Usuario.objects.all():
                                    if b_1.upper() in i.apellido.upper():
                                        vincular.agregar_usuario(i)
                        elif b_2 == "E":
-                           if errores.error_2(b_1) == None:
+                           if errores.error_2(b_1) is None:
                                for i in Usuario.objects.all():
                                    if b_1.upper() in i.email.upper():
                                        vincular.agregar_usuario(i)
                        elif b_2 == "G":
-                           if errores.error_3(b_1) == None:
+                           if errores.error_3(b_1) is  None:
                                if b_1.upper() == "FEMENINO":
                                    genero_f_m = "F"
                                else:
@@ -97,7 +114,7 @@ def tabla(request):
                                    if genero_f_m.upper() in i.genero.upper():
                                        vincular.agregar_usuario(i)
                        else:
-                           if errores.error_4(b_1) == None:
+                           if errores.error_4(b_1) is None:
                                use = Usuario.objects.all()
                                print(use)
                                inico, fin = 0, len(use)
@@ -129,7 +146,8 @@ def tabla(request):
                     contenido = {"vincular": lista_ordenada,
                                  "Presentar": False,
                                  "busqueda": Bucar(),
-                                 "Mensaje": mensaje}
+                                 "Mensaje": mensaje,
+                                 }
                     return render(request, "modelo1/tabla.html", contenido, )
     else:
         for i in Usuario.objects.all():
@@ -137,7 +155,8 @@ def tabla(request):
     contenido={"vincular": vincular.listar_usuarios(),
                "Presentar": False,
                "busqueda": Bucar(),
-               "Mensaje":mensaje}
+               "Mensaje":mensaje,
+               }
     return render(request, "modelo1/tabla.html",contenido,)
 def siguiente(request):
     vincular = ListaEnlazada()
@@ -146,44 +165,44 @@ def siguiente(request):
     estados = vincular.listar_usuarios()
     for guardar in estados:
         if guardar.estado == "Atendiendo":
-            Data_bs = Usuario.objects.get(id=guardar.id)
-            Data_bs.estado = "Atendido"
-            Data_bs.save()
+            data_bs = Usuario.objects.get(id=guardar.id)
+            data_bs.estado = "Atendido"
+            data_bs.save()
         elif guardar.estado == "Espera":
-            Data_bs = Usuario.objects.get(id=guardar.id)
-            Data_bs.estado = "Atendiendo"
-            Data_bs.save()
+            data_bs = Usuario.objects.get(id=guardar.id)
+            data_bs.estado = "Atendiendo"
+            data_bs.save()
             break
     return redirect("index")
 def borrar(request):
     Usuario.objects.all().delete()
     return redirect("index")
-def borrar_1(request,id):
+def borrar_1(request,id_1):
     use=Usuario.objects.all()
     inico,fin = 0,len(use)
     while inico<fin:
         medio = (inico + fin) // 2
-        if use[medio].id == id:
+        if use[medio].id == id_1:
             use_obj = Usuario.objects.get(id=use[medio].id)
             use_obj.delete()
             break
-        elif use[medio].id < id:
+        elif use[medio].id < id_1:
             inico=medio
         else:
             fin=medio
     return redirect("tabla")
-def editar(request,id):
+def editar(request,id_1):
     form=UsuariosForm()
     if request.method == "POST":
         from_2 = UsuariosForm(request.POST)
         if from_2.is_valid():
-            user = Usuario.objects.get(id=id)
+            user = Usuario.objects.get(id=id_1)
             user.nombre = from_2.cleaned_data['nombre']
             user.apellido = from_2.cleaned_data['apellido']
             user.email = from_2.cleaned_data['email']
             user.genero = from_2.cleaned_data['genero']
             user.save()
-    return render(request,"modelo1/editar.html",{"forms": form,"Presentar":False,"id":id})
+    return render(request,"modelo1/editar.html",{"forms": form,"Presentar":False,"id":id_1})
 def descargar(request):
     usuarios = Usuario.objects.all()
 
@@ -208,7 +227,6 @@ def descargar(request):
         return render(request,"modelo1/index.html",contenido)
 
 def cargar(request):
-    form = ArchivoForm()
     mensaje=None
     try:
         if request.method == "POST":
@@ -227,26 +245,45 @@ def cargar(request):
     else:
        mensaje=None
     finally:
-        contenido = {"form": form, "Presentar": False, "mensaje": mensaje,"Archivo":Archivo.objects.all()}
-        return render(request,"modelo1/archivo.html",contenido)
-def mostrar_json(request,id):
+        vincular = ListaEnlazada()
+        atendiendo = None
+        nodos = ""
+        form = ArchivoForm()
+        for i in Usuario.objects.all():
+            vincular.agregar_usuario(i)
+        estados = vincular.listar_usuarios()
+        nodos = vincular.listar_usuarios()
+        for guardar in estados:
+            if guardar.estado == "Atendiendo":
+                atendiendo = guardar
+                break
+        requerido = {
+            "vincular": nodos,
+            "Atendiendo": atendiendo,
+            "Presentar": True,
+            "form": form,
+            "Mensaje": mensaje,
+            "Archivo": Archivo.objects.all(),
+        }
+
+        return render(request,"modelo1/archivo.html",requerido)
+def mostrar_json(request,id_1):
     archivos = Archivo.objects.all()
     data = None
     if archivos.exists():
-        archivo = archivos.get(id=id)
+        archivo = archivos.get(id=id_1)
         with archivo.archivo.open('r') as f:
             data = json.load(f)
-            print(data)
     return render(request, 'modelo1/ver.html', {'data': data})
 
-def subir_tabla(request,id):
+def subir_tabla(request,id_1):
     archivos = Archivo.objects.all()
     user_1=Usuario.objects.all()
     mensajess=None
     try:
        if len(user_1) == 0:
            if archivos.exists():
-               archivo = archivos.get(id=id)
+               archivo = archivos.get(id=id_1)
                with archivo.archivo.open('r') as f:
                    data = json.load(f)
                for i in data:
@@ -266,22 +303,59 @@ def subir_tabla(request,id):
            raise ValueError("Ya existe una tabla")
     except Exception as e:
         mensajess= f"{e}"
-    return render(request,"modelo1/tablas_c.html",{"archivos":archivos,"mensaje":mensajess})
+
+    vincular = ListaEnlazada()
+    atendiendo = None
+    archivos = Archivo.objects.all()
+    for i in Usuario.objects.all():
+        vincular.agregar_usuario(i)
+    estados = vincular.listar_usuarios()
+    nodos = vincular.listar_usuarios()
+    for guardar in estados:
+        if guardar.estado == "Atendiendo":
+            atendiendo = guardar
+            break
+    requerido = {
+        "vincular": nodos,
+        "Atendiendo": atendiendo,
+        "Presentar": True,
+        "archivos": archivos,
+        "mensaje": mensajess,
+    }
+    return render(request,"modelo1/tablas_c.html",requerido)
 
 def tablas_c(request):
+    vincular = ListaEnlazada()
+    atendiendo = None
     archivos = Archivo.objects.all()
-    return render(request,"modelo1/tablas_c.html",{"archivos":archivos,"mensaje":None})
+    for i in Usuario.objects.all():
+        vincular.agregar_usuario(i)
+    estados = vincular.listar_usuarios()
+    nodos = vincular.listar_usuarios()
+    for guardar in estados:
+        if guardar.estado == "Atendiendo":
+            atendiendo = guardar
+            break
+    requerido = {
+        "vincular": nodos,
+        "Atendiendo": atendiendo,
+        "Presentar": True,
+        "archivos": archivos,
+        "mensaje": None,
+    }
 
-def borrar_1_tabla(request,id):
+    return render(request,"modelo1/tablas_c.html",requerido)
+
+def borrar_1_tabla(request,id_1):
     arc=Archivo.objects.all()
     inico,fin = 0,len(arc)
     while inico<fin:
         medio = (inico + fin) // 2
-        if arc[medio].id == id:
+        if arc[medio].id == id_1:
             arc_obj = Archivo.objects.get(id=arc[medio].id)
             arc_obj.delete()
             break
-        elif arc[medio].id < id:
+        elif arc[medio].id < id_1:
             inico=medio
         else:
             fin=medio

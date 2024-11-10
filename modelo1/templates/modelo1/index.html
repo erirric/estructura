@@ -8,82 +8,99 @@
 </head>
 <body>
   <div id="mover">
-      <div><a href={% url "index" %}><button class="m" type="button">Inicio</button></a></div>
-      <div><a href={% url 'formulario' %}><button class="m" type="button">Agregar</button></a></div>
-      <div><a href={% url 'tabla' %}><button type="button" class="m">Tabla</button></a></div>
-      <div><a href={% url 'descarga' %}><button type="button" class="m">Descargar</button></a></div>
-      <div><a href={% url 'cargar' %}><button type="button" class="m">Cargar</button></a></div>
-      <div><a href={% url 'tablas_c' %}><button type="button" class="m">Tablas cargadas</button></a></div>
+      <h1>TICKET</h1>
+       <div class="contenedor">
+           <div><a href={% url "index" %}><button class="m" type="button" title="Inicio"><img src="{% static "img/hogar.png" %}" alt="icono" class="img"></button></a></div>
+           <div><a href={% url 'formulario' %}><button class="m" type="button" title="Agregar"><img src="{% static "img/registro.png" %}" alt="icono" class="img"></button></a></div>
+           <div><a href={% url 'tabla' %}><button type="button" class="m" title="Buscar"><img src="{% static "img/lupa.png" %}" alt="icono" class="img"></button></a></div>
+           <div><a href={% url 'tablas_c' %}><button type="button" class="m" title="Archivos cargados"><img src="{% static "img/bandeja-de-entrada.png" %}" alt="icono" class="img"> </button></a></div>
+       </div>
+
+       <div>
+           <a href={% url 'cargar' %}><button type="button" class="m des"><img src="{% static "img/subir.png" %}" alt="icono" class="img">Cargar</button></a>
+           <a href={% url 'descarga' %}><button type="button" class="m des"><img src="{% static "img/descargar.png" %}" alt="icono" class="img">Descargar</button></a>
+       </div>
   </div>
- {% if mensajess %}
-    {% for message in messages %}
-        <div class="alert alert-{{ mensajess.tags }}">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
-
- {% if Presentar %}
-      {% if Mensaje %}
-      <p>{{ Mensaje }}</p>
-      {% endif %}
-       <div id="boton">
-         <form method="post" action="{% url "siguiente"%}">
-             {% csrf_token %}
-             <button type="submit" class="button_3">Siguiente</button>
-         </form>
-         <form method="post" action="{% url "borrar"%}">
-             {% csrf_token %}
-             <button type="submit" class="button_4">borrar todo</button>
-         </form>
-     </div>
-
-      <table>
-      <thead>
-           <tr>
-               <th> Nombre </th>
-               <th> Apellido </th>
-               <th> Genero </th>
-               <th> Ticket </th>
-           </tr>
-      </thead>
-      <tbody>
-            {% if Atendiendo %}
-            <tr>
-                <td>{{ Atendiendo.nombre}}</td>
-                <td>{{ Atendiendo.apellido}}</td>
-                <td>{{ Atendiendo.genero}}</td>
-                <td>{{ Atendiendo.ticket}}</td>
-            </tr>
-
-            {% else %}
-                <tr><td colspan="5">---</td></tr>
-            {% endif %}
-  </table>
-  <table>
-      <thead>
-            <tr>
-                <th> Nombre </th>
-                <th> Apellido </th>
-                <th> Genero </th>
-                <th> Ticket </th>
-                </tr>
-      </thead>
-      <tbody>
-        {% for usuario in vincular %}
-            {% if usuario.estado == "Espera" %}
-                <tr>
-                     <td>{{ usuario.nombre}}</td>
-                     <td>{{ usuario.apellido}}</td>
-                     <td>{{ usuario.genero}}</td>
-                     <td>{{ usuario.ticket}}</td>
-
-            </tr>
-            {% endif %}
-       {% endfor %}
-     </tbody>
-  </table>
- {% endif %}
-{% block content  %}{% endblock %}
+   {% if Presentar %}
+       <div class="todo">
+           <div id="cuerpo">
+           <h2>Atendiendo</h2>
+               <table>
+                   <thead>
+                   <tr>
+                       <th> Nombre </th>
+                       <th> Apellido </th>
+                       <th> Genero </th>
+                       <th> Ticket </th>
+                   </tr>
+                   </thead>
+                   <tbody>
+                   {% if Atendiendo %}
+                       <tr>
+                           <td>{{ Atendiendo.nombre}}</td>
+                           <td>{{ Atendiendo.apellido}}</td>
+                           <td>{{ Atendiendo.genero}}</td>
+                           <td>{{ Atendiendo.ticket}}</td>
+                       </tr>
+                   {% else %}
+                       <tr>
+                           <td >------------</td>
+                           <td >------------</td>
+                           <td >------------</td>
+                           <td >------------</td>
+                       </tr>
+                   {% endif %}
+               </table>
+               <div id="boton">
+                   <form method="post" action="{% url "siguiente"%}">
+                       {% csrf_token %}
+                       <button type="submit" class="botones siguiente">Siguiente</button>
+                   </form>
+                   <form method="post" action="{% url "borrar"%}">
+                       {% csrf_token %}
+                       <button type="submit" class="botones borrar">borrar todo</button>
+                   </form>
+               </div>
+           <h2>Espera</h2>
+           <div class="mover_tabla">
+               <table>
+                   <thead>
+                   <tr>
+                       <th> Nombre </th>
+                       <th> Apellido </th>
+                       <th> Genero </th>
+                       <th> Ticket </th>
+                   </tr>
+                   </thead>
+                   <tbody>
+                   {% for usuario in vincular %}
+                       {% if usuario.estado == "Espera" %}
+                           <tr>
+                               <td>{{ usuario.nombre}}</td>
+                               <td>{{ usuario.apellido}}</td>
+                               <td>{{ usuario.genero}}</td>
+                               <td>{{ usuario.ticket}}</td>
+                           </tr>
+                       {% endif %}
+                   {% endfor %}
+                   </tbody>
+               </table>
+                   {% if Mensaje %}
+                       <p class="mensaje">{{ Mensaje }}</p>
+                   {% endif %}
+           </div>
+       </div>
+   {% endif %}
+  {% if  Presentar_blo == None %}
+      <div class="costado">{% block content  %}
+      {% endblock %}</div>
+  {% elif  Presentar_blo == True %}
+      <div class="costado img">
+         <div class="imagenes">
+             <img src="{% static "anuncios/anu1.jpg" %}" alt="anuncio">
+             <img src="{% static "anuncios/anu2.jpg" %}" alt="anuncio">
+         </div>
+      </div>
+  {% endif %}
 </body>
 </html>
